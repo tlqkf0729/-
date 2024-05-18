@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자동차 쇼핑</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .car {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .car img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .car h2 {
+            margin-top: 0;
+        }
+
+        .search-form {
+            margin-bottom: 20px;
+        }
+
+        .search-form input[type="text"] {
+            padding: 10px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .search-form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>자동차 쇼핑</h1>
+    </header>
+
+    <div class="container">
+        <form class="search-form" onsubmit="searchCars(event)">
+            <input type="text" id="searchInput" placeholder="차량 검색">
+            <button type="submit">검색</button>
+        </form>
+
+        <div class="cars-container" id="carsContainer">
+            <!-- 여기에 자동차 목록이 동적으로 생성됩니다. -->
+        </div>
+    </div>
+
+    <script>
+        const cars = [
+            { brand: "Hyundai", model: "Sonata", price: "28,000", image: "sonata.jpg" },
+            { brand: "Porsche", model: "911", price: "120,000", image: "https://via.placeholder.com/200" },
+            { brand: "Ferrari", model: "488 GTB", price: "300,000", image: "488.jpg" },
+            { brand: "BMW", model: "3 Series", price: "35,000", image: "https://via.placeholder.com/200" },
+            { brand: "Ford", model: "Fusion", price: "25,000", image: "fusion.jpg" },
+            { brand: "Honda", model: "Civic", price: "22,000", image: "civic.jpg" },
+            { brand: "Toyota", model: "Camry", price: "26,000", image: "camry.jpg" },
+            { brand: "Chevrolet", model: "Malibu", price: "27,000", image: "malibu.jpg" },
+            { brand: "Tesla", model: "Model 3", price: "40,000", image: "model3.jpg" },
+            { brand: "Mercedes-Benz", model: "C-Class", price: "45,000", image: "https://via.placeholder.com/200" },
+            { brand: "Audi", model: "A4", price: "42,000", image: "https://via.placeholder.com/200" },
+            { brand: "Lamborghini", model: "Huracan", price: "250,000", image: "https://via.placeholder.com/200" },
+            { brand: "Nissan", model: "Altima", price: "24,000", image: "altima.jpg" },
+            { brand: "Subaru", model: "Outback", price: "27,000", image: "https://via.placeholder.com/200" },
+            { brand: "Volkswagen", model: "Golf", price: "23,000", image: "golf.jpg" },
+            { brand: "Mazda", model: "Mazda3", price: "22,000", image: "https://via.placeholder.com/200" },
+            { brand: "Kia", model: "Optima", price: "26,000", image: "optima.jpg" },
+            { brand: "Volvo", model: "S60", price: "39,000", image: "https://via.placeholder.com/200" },
+            { brand: "Jaguar", model: "XE", price: "41,000", image: "https://via.placeholder.com/200" },
+            { brand: "Land Rover", model: "Discovery", price: "55,000", image: "https://via.placeholder.com/200" },
+            { brand: "Jeep", model: "Wrangler", price: "30,000", image: "https://via.placeholder.com/200" },
+            { brand: "Lincoln", model: "Navigator", price: "70,000", image: "https://via.placeholder.com/200" },
+            { brand: "Cadillac", model: "Escalade", price: "75,000", image: "https://via.placeholder.com/200" },
+            { brand: "Buick", model: "Regal", price: "29,000", image: "https://via.placeholder.com/200" },
+            { brand: "Chrysler", model: "300", price: "32,000", image: "https://via.placeholder.com/200" },
+            { brand: "Genesis", model: "G70", price: "37,000", image: "g70.jpg" },
+            { brand: "Infiniti", model: "Q50", price: "39,000", image: "https://via.placeholder.com/200" },
+            { brand: "Lexus", model: "IS", price: "40,000", image: "https://via.placeholder.com/200" },
+            { brand: "Acura", model: "TLX", price: "37,000", image: "https://via.placeholder.com/200" },
+            { brand: "Alfa Romeo", model: "Giulia", price: "40,000", image: "https://via.placeholder.com/200" },
+            { brand: "Bentley", model: "Continental GT", price: "200,000", image: "https://via.placeholder.com/200" },
+            { brand: "Bugatti", model: "Chiron", price: "3,000,000", image: "https://via.placeholder.com/200" },
+            { brand: "Rolls-Royce", model: "Phantom", price: "500,000", image: "https://via.placeholder.com/200" },
+            { brand: "McLaren", model: "720S", price: "300,000", image: "https://via.placeholder.com/200" },
+            { brand: "Lotus", model: "Evora", price: "90,000", image: "https://via.placeholder.com/200" },
+            { brand: "Maserati", model: "Ghibli", price: "80,000", image: "https://via.placeholder.com/200" },
+            { brand: "Koenigsegg", model: "Regera", price: "2,000,000", image: "https://via.placeholder.com/200" },
+            { brand: "Maybach", model: "S-Class", price: "200,000", image: "https://via.placeholder.com/200" },
+            { brand: "Polestar", model: "2", price: "60,000", image: "https://via.placeholder.com/200" },
+            { brand: "Rivian", model: "R1T", price: "70,000", image: "https://via.placeholder.com/200" },
+            { brand: "Lucid", model: "Air", price: "80,000", image: "https://via.placeholder.com/200" },
+            { brand: "Faraday Future", model: "FF 91", price: "150,000", image: "https://via.placeholder.com/200" },
+            { brand: "Rimac", model: "C_Two", price: "2,000,000", image: "https://via.placeholder.com/200" },
+            // 더 많은 자동차 정보를 추가할 수 있습니다.
+        ];
+
+        function displayCars(carsArray) {
+            const carsContainer = document.getElementById("carsContainer");
+            carsContainer.innerHTML = "";
+
+            carsArray.forEach(car => {
+                const carElement = document.createElement("div");
+                carElement.classList.add("car");
+
+                carElement.innerHTML = `
+                    <img src="${car.image}" alt="${car.brand} ${car.model}">
+                    <h2>${car.brand} ${car.model}</h2>
+                    <p>가격: $${car.price}</p>
+                `;
+
+                carsContainer.appendChild(carElement);
+            });
+        }
+
+        function searchCars(event) {
+            event.preventDefault();
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+
+            const filteredCars = cars.filter(car => {
+                const brandMatch = car.brand.toLowerCase().includes(searchTerm);
+                const modelMatch = car.model.toLowerCase().includes(searchTerm);
+                return brandMatch || modelMatch;
+            });
+
+            displayCars(filteredCars);
+        }
+
+        // 페이지 로드시 모든 차량 표시
+        displayCars(cars);
+    </script>
+</body>
+</html>
